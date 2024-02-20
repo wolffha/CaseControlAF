@@ -14,6 +14,9 @@
 #' equal to the number of variants
 #' @import genpwr
 #' @export 
+
+### COMMENT ###
+
 CaseControl_AF <- function(N_case, N_control, AF_population, OR){
   
   require(genpwr)
