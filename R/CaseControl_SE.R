@@ -1,5 +1,7 @@
 # Helper function for ReACt method to derive case/control AF using SE
+# NOTE: this method exists as a C implementation at <https://github.com/Paschou-Lab/ReAct>
 GroupFreq <- function(se, nCase, nControl, OR, freq = 0.0) {
+  # using w, x, y, z to maintain consistency with the derivation from ReACt manuscript
   x = 2*nCase
   y = 2*nControl
   w = se^2
@@ -16,9 +18,9 @@ GroupFreq <- function(se, nCase, nControl, OR, freq = 0.0) {
     }
   }
   if (tmp2 < 0) { # if discriminate is <0 cannot solve and return 0s
-    resFrq <- data.frame(pCase = 0.0,
-                         pControl = 0.0,
-                         pPop = 0.0)
+    resFrq <- data.frame(MAF_case = 0.0,
+                         MAF_control = 0.0,
+                         MAF_pop = 0.0)
   } else { # actually solve the allele frequency
     tmp1 <- w * x * y * z - (2 * y * z * (1 - z))
     tmp2 = tmp2^0.5
@@ -36,10 +38,11 @@ GroupFreq <- function(se, nCase, nControl, OR, freq = 0.0) {
     a2 = x - b2
     frq2 = c2 / (c2 + d2)
     
-    flag1 = 0
-    flag2 = 0
-    
-    if (a1 > 0 & b1 > 0 & c1 > 0 & d1 > 0) {
+    flag1 = 0 # indicator to use root d1
+    flag2 = 0 # indicator to use root d2
+
+    # need to select the root that allows a, b, c, d (allele counts of the 2x2 table) to all be positive
+    if (a1 > 0 & b1 > 0 & c1 > 0 & d1 > 0) { 
       flag1 = 1
       tmpRes1 <- data.frame(res11 = a1,
                             res12 = b1,
@@ -54,32 +57,34 @@ GroupFreq <- function(se, nCase, nControl, OR, freq = 0.0) {
                             res22 = d2)
     }
     
-    if (flag1 == 1 & flag2 == 0) {
+    if (flag1 == 1 & flag2 == 0) { # use d1 if d1 is all positive and d2 is NOT
       res = tmpRes1
-    } else if (flag1 == 0 & flag2 == 1) {
+    } else if (flag1 == 0 & flag2 == 1) { # use d2 if all positive and d1 is NOT
       res = tmpRes2
-    } else if (flag1 == 1 & flag2 == 1) {
+    } else if (flag1 == 1 & flag2 == 1) { # if both are all positive then
       if (abs(freq - frq1) < abs(freq - frq2)) { #use the larger value as it minimizes the fxn of interest
         res = tmpRes1
       } else {
         res = tmpRes2
       }
-    } else {
+    } else { # if it cannot solve due to negatives return all 0s
       res =  data.frame(res11 = 0.0,
                         res12 = 0.0,
                         res21 = 0.0,
                         res22 = 0.0)
     }
-    pCase = res$res11 / (res$res11 + res$res12)
-    pControl = res$res21 / (res$res21 + res$res22)
-    pPop = (res$res11 + res$res21) / (res$res11 + res$res12 + res$res21 + res$res22)
+    
+    # solve for the minor allele frequency using the solved for allele counts
+    MAF_case = res$res11 / (res$res11 + res$res12)
+    MAF_control = res$res21 / (res$res21 + res$res22)
+    MAF_pop = (res$res11 + res$res21) / (res$res11 + res$res12 + res$res21 + res$res22)
     
     # if any evaluates to inf replace with 0
-    pCase <- ifelse(is.infinite(pCase), 0.0, pCase)
-    pControl <- ifelse(is.infinite(pControl), 0.0, pControl)
-    pPop <- ifelse(is.infinite(pPop), 0.0, pPop)
+    MAF_case <- ifelse(is.infinite(MAF_case), 0.0, MAF_case)
+    MAF_control <- ifelse(is.infinite(MAF_control), 0.0, MAF_control)
+    MAF_pop <- ifelse(is.infinite(MAF_pop), 0.0, MAF_pop)
     
-    resFrq <- data.frame(pCase, pControl, pPop)
+    resFrq <- data.frame(MAF_case, MAF_control, MAF_pop)
   }
   return(resFrq)
 }
@@ -96,9 +101,9 @@ GroupFreq <- function(se, nCase, nControl, OR, freq = 0.0) {
 #' @return a dataframe with 3 columns: pCase, pControl, pPop for the estimated AFs for each variant which are the rows
 #' @export 
 CaseControl_SE <- function(OR, SE, N_case, N_control) {
-  res <- data.frame(pCase = rep(0, length(OR)),
-                    pControl = rep(0, length(OR)),
-                    pPop = rep(0, length(OR)))
+  res <- data.frame(MAF_case = rep(0, length(OR)),
+                    MAF_control = rep(0, length(OR)),
+                    MAF_pop = rep(0, length(OR)))
   for(i in 1:length(OR)) {
     res[i,] <- GroupFreq(SE[i], nCase = N_case, nControl = N_control, OR[i])
   }
