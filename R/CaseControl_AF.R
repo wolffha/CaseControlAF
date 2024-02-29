@@ -15,13 +15,14 @@
 #' @import genpwr
 #' @export 
 CaseControl_AF <- function(N_case, N_control, AF_population, OR){
-  
+
+  # uses the genpwr package for the quad_roots function to solve for the roots of quadratic
   require(genpwr)
   
   #calculate total sample size
   N_total = N_control+N_case
   
-  #set a, b, c of quadratic equation derived in pdf
+  #set a, b, c of quadratic equation derived in manuscript
   a = (N_control/N_case)*(OR-1)
   b = (OR-((N_total/N_case)*AF_population*OR))+((N_control/N_case)+(N_total*AF_population/N_case))
   c = -(N_total/N_case)*AF_population
@@ -39,7 +40,7 @@ CaseControl_AF <- function(N_case, N_control, AF_population, OR){
   }
   
   
-  #calculate AF_case with known relationship shown in pdf
+  #calculate AF_case with known relationship shown in manuscript
   AF_case = (N_total/N_case)*AF_population - (N_control/N_case)*AF_control
   
   #Output shows case AF first, then control AF
