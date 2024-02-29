@@ -52,7 +52,7 @@ Use this function when you have the following statistics (for each variant)
 
 **SE**: a numeric vector with the SE(log(OR)) for each variant
 
-Returns a dataframe with three columns with names: pCase, pControl and pPop. The number of rows is equal to the number of variants
+Returns a dataframe with three columns with names: MAF_case, MAF_control and MAF_pop containing the estimated minor allele frequency in the cases, controls, and whole sample. The number of rows is equal to the number of variants
 
 **NOTE:** This method assumes we are estimating the minor allele frequency (MAF)
 
@@ -114,16 +114,16 @@ se_method_results <- CaseControl_SE(N_case = nCase_sample,
                                     SE = SampleDat$SE)
 
 head(se_method_results)
-#      pCase  pControl      pPop
-#1 0.2721196 0.2637265 0.2684629
-#2 0.2013120 0.1909652 0.1968041
-#3 0.3521112 0.3417763 0.3476085
-#4 0.2354858 0.2192349 0.2284056
-#5 0.3058994 0.2967891 0.3019302
-#6 0.2657115 0.2521924 0.2598215
+#  MAF_case    MAF_control MAF_pop
+#1 0.2721196   0.2637265   0.2684629
+#2 0.2013120   0.1909652   0.1968041
+#3 0.3521112   0.3417763   0.3476085
+#4 0.2354858   0.2192349   0.2284056
+#5 0.3058994   0.2967891   0.3019302
+#6 0.2657115   0.2521924   0.2598215
 
 # visualize the bias in results compared to the published minor allele frequency (MAF)
-plotdata <- data.frame(estimated = c(se_method_results$pCase, se_method_results$pControl),
+plotdata <- data.frame(estimated = c(se_method_results$MAF_case, se_method_results$MAF_control),
                        true = c(se_method_results$case_maf,se_method_results$control_maf),
                        status = c(rep("Case", nrow(se_method_results)), 
                        rep("Control", nrow(se_method_results))))
