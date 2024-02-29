@@ -41,7 +41,7 @@ Use this function when you have the following statistics (for each variant)
 * Odds Ratio (OR) or beta coefficient
 * **SE** of the log(OR) for each variant
 
-*Code adapted from ReACt GroupFreq function available here: [(https://github.com/Paschou-Lab/ReAct/blob/main/GrpPRS_src/CountConstruct.c)]*
+*Code adapted from ReACt GroupFreq function available here: (https://github.com/Paschou-Lab/ReAct/blob/main/GrpPRS_src/CountConstruct.c)*
 
 ### Usage
 **N_case**: an integer for the number of case samples
