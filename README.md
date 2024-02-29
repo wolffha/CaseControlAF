@@ -105,7 +105,7 @@ ggplot(plotdata, aes(x = true, y = estimated)) +
   theme_bw() +
   facet_wrap(~status)
 ```
-<img src="man/figures/CaseControl_AF_example.png" height=30% width=30%>
+<img src="man/figures/CaseControl_AF_example.png" height=70% width=70%>
 
 ``` r
 se_method_results <- CaseControl_SE(N_case = nCase_sample,
@@ -135,4 +135,4 @@ ggplot(plotdata, aes(x = true, y = estimated)) +
   theme_bw() +
   facet_wrap(~status)
 ```
-<img src="man/figures/CaseControl_SE_example.png" height=30% width=30%>
+<img src="man/figures/CaseControl_SE_example.png" height=70% width=70%>
