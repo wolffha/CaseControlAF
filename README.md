@@ -52,8 +52,8 @@ Use this function when you have the following statistics (for each variant)
 
 **SE**: a numeric vector with the SE(log(OR)) for each variant
 
-**Return**: Returns a dataframe with three columns with names: pCase, pControl and pPop. The number of rows is equal to the number of variants
-**NOTE:** This method assumes we are estimating the minor allele frequency 
+Returns a dataframe with three columns with names: pCase, pControl and pPop. The number of rows is equal to the number of variants
+**NOTE:** This method assumes we are estimating the minor allele frequency (MAF)
 
 ## A small example
 
@@ -104,7 +104,7 @@ ggplot(plotdata, aes(x = true, y = estimated)) +
   theme_bw() +
   facet_wrap(~status)
 ```
-![](man/figures/CaseControl_AF_example.png){height=200}
+<img src="man/figures/CaseControl_AF_example.png" height=50%>
 
 ``` r
 se_method_results <- CaseControl_SE(N_case = nCase_sample,
@@ -134,4 +134,4 @@ ggplot(plotdata, aes(x = true, y = estimated)) +
   theme_bw() +
   facet_wrap(~status)
 ```
-![](man/figures/CaseControl_SE_example.png){height=200}
+<img src="man/figures/CaseControl_SE_example.png" height=50%>
