@@ -16,7 +16,7 @@ CaseControl_SE(OR, SE, N_case, N_control)
 \item{N_control}{an integer of the number of Control individuals}
 }
 \value{
-a dataframe with 3 columns: pCase, pControl, pPop for the estimated AFs for each variant which are the rows
+a dataframe with 3 columns: MAF_case, MAF_control, MAF_pop for the estimated AFs for each variant which are the rows
 }
 \description{
 This is a function to derive the case and control AFs from GWAS summary statistics when 
