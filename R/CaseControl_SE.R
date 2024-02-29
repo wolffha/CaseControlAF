@@ -98,7 +98,7 @@ GroupFreq <- function(se, nCase, nControl, OR, freq = 0.0) {
 #' @param se a vector of standard errors for the OR calculation *make sure the indices match between the two vectors
 #' @param nCase an integer of the number of Case individuals
 #' @param nControl an integer of the number of Control individuals
-#' @return a dataframe with 3 columns: pCase, pControl, pPop for the estimated AFs for each variant which are the rows
+#' @return a dataframe with 3 columns: MAF_case, MAF_control, MAF_pop for the estimated MAFs for each variant 
 #' @export 
 CaseControl_SE <- function(OR, SE, N_case, N_control) {
   res <- data.frame(MAF_case = rep(0, length(OR)),
