@@ -63,18 +63,18 @@ CaseControl_SE <- function(OR, SE, N_case, N_control) {
 
         # if both roots allow for all values to be positive, choose the larger
         if(!any(vec1 < 0) & !(any(vec2 < 0))) {
-          if(d1 > d2) { # if d1 is the larger root, then the AC_control with be d1 and AC_case = a1
-            AC_control[i] = d1
+          if(d1 > d2) { # if d1 is the larger root, then the AC_control = c1 and AC_case = a1
+            AC_control[i] = c1
             AC_case[i] = a1
           } else {
-            AC_control[i] = d2
+            AC_control[i] = c2
             AC_case[i] = a2
           }
-        } else if(!any(vec1 < 0)) { # if d1 allows all values of 2x2 to be positive but NOT d2, use d1 and a1
-          AC_control[i] = d1
+        } else if(!any(vec1 < 0)) { # if d1 allows all values of 2x2 to be positive but NOT d2, use c1 and a1
+          AC_control[i] = c1
           AC_case[i] = a1
-        } else { # if d2 allows all values to be positive but NOT d1, use d2 and a2
-          AC_control[i] = d2
+        } else { # if d2 allows all values to be positive but NOT d1, use c2 and a2
+          AC_control[i] = c2
           AC_case[i] = a2
         }
       }
