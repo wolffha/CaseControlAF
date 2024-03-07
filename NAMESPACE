@@ -2,4 +2,6 @@
 
 export(CaseControl_AF)
 export(CaseControl_SE)
+export(CC_GWAS)
 import(genpwr)
+import(tidyverse)
