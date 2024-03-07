@@ -105,13 +105,13 @@ CC_GWAS <- function(trait1_data, trait2_data,
   colnames(trait2_data)[which(colnames(trait2_data) == position_colname)] = "pos"
   colnames(trait2_data)[which(colnames(trait2_data) == rsid_colname)] = "RSID"
   
-  if(AF_case_colname != "MAF_case") {
-    trait1_data$MAF_case <- trait1_data[,c(AF_case_colname)]
-    trait2_data$MAF_case <- trait2_data[,c(AF_case_colname)]
+  if(AF_case_colname != "AF_case") {
+    trait1_data$AF_case <- trait1_data[,c(AF_case_colname)]
+    trait2_data$AF_case <- trait2_data[,c(AF_case_colname)]
   }
-  if(AF_control_colname != "MAF_control") {
-    trait1_data$MAF_control <- trait1_data[,c(AF_control_colname)]
-    trait2_data$MAF_control <- trait2_data[,c(AF_control_colname)]
+  if(AF_control_colname != "AF_control") {
+    trait1_data$AF_control <- trait1_data[,c(AF_control_colname)]
+    trait2_data$AF_control <- trait2_data[,c(AF_control_colname)]
   }
   if(A1_colname != "A1") {
     trait1_data$A1 <- trait1_data[,c(A1_colname)]
@@ -128,18 +128,18 @@ CC_GWAS <- function(trait1_data, trait2_data,
                                          suffix = c(".trait1", ".trait2"))
   
   # run the actual CC-GWAS using the cleaned datasets
-  results <- calc_ccgwas(trait1_AF_case = combined$MAF_case.trait1,
-                         trait2_AF_case = combined$MAF_case.trait2,
-                         trait1_AF_control = combined$MAF_control.trait1,
-                         trait2_AF_control = combined$MAF_control.trait2,
+  results <- calc_ccgwas(trait1_AF_case = combined$AF_case.trait1,
+                         trait2_AF_case = combined$AF_case.trait2,
+                         trait1_AF_control = combined$AF_control.trait1,
+                         trait2_AF_control = combined$AF_control.trait2,
                          trait1_N_case = trait1_N_case,
                          trait2_N_case = trait2_N_case,
                          trait1_N_control = trait1_N_control,
                          trait2_N_control = trait2_N_control)
   
   toreturn <- combined %>% select(chr.trait1, pos.trait1, RSID.trait1, A1.trait1, A2.trait1,
-                                  MAF_case.trait1, MAF_case.trait2, MAF_control.trait1,
-                                  MAF_control.trait2)
+                                  AF_case.trait1, AF_case.trait2, AF_control.trait1,
+                                  AF_control.trait2)
   colnames(toreturn)[1:5] <- c("chr", "pos", "RSID", "A1", "A2")
   toreturn <- toreturn %>% cbind(results)
   return(toreturn)
