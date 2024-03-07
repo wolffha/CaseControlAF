@@ -2,7 +2,7 @@ Package: CaseControlAF
 Version: 0.1.0
 Date: 2024-02-13
 Title: Case Control Allele Frequency Reconstruction
-Description: Functions to reconstruct case and control AFs from summary statistics. One function uses OR, NCase, NControl, and SE(log(OR)). The second function uses OR, NCase, NControl, and AF for the whole sample.
+Description: Functions to reconstruct case and control AFs from summary statistics. One function uses OR, NCase, NControl, and SE(log(OR)). The second function uses OR, NCase, NControl, and AF for the whole sample. It also includes a function to perform case-case GWAS using the framework proposed in ReACt software. 
 Author: Hayley R Wolff (Stoneman)
 Maintainer: Hayley R Wolff (Stoneman) <hayley.wolff@cuanschutz.edu>
 License: GPL-3
