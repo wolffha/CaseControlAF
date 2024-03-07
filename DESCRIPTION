@@ -11,3 +11,4 @@ Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Imports:
   genpwr
+  tidyverse
