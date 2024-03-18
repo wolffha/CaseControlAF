@@ -1,3 +1,67 @@
+# Helper functions
+
+# Function to calculate the p-value of a wald statistic assuming normal distribution
+calc_waldP <- function(beta, SE) {
+  z <- abs(beta/SE)
+  p_val <- 2*(1-pnorm(z))
+  return(p_val)
+}
+
+# function to calculate OR, SE, and p-value using a 2x2 table
+# assumed to be using the AF of trait 1, AF of trait 2, and sample sizes
+# DefFac is used to scale the allele counts calculated based on sample overlap
+calc_ORStat <- function(AF1, N1, AF2, N2, DefFac) {
+  # first calculate the 2x2 tables of allele counts
+  a = AF1 * 2 * N1 * DefFac[1]
+  b = (1-AF1) * 2 * N1 * DefFac[1]
+  c = AF2 * 2 * N2 * DefFac[2]
+  d = (1-AF2) * 2 * N2 * DefFac[2]
+  
+  OR <- (a*d)/(b*c)
+  SE <- sqrt(1/a + 1/b + 1/c + 1/d)
+  p <- calc_waldP(log(OR), SE)
+  
+  return(data.frame(OR = OR, SE = SE, p = p))
+}
+
+# main helper function for CC-GWAS
+# uses the case and control AF for each of the two traits as well as the case and control
+# sample sizes of each trait
+calc_ccgwas <- function(trait1_AF_case, trait2_AF_case, trait1_N_case, trait2_N_case,
+                       trait1_AF_control, trait2_AF_control, trait1_N_control, trait2_N_control) {
+  # print(head(trait1_AF_case))
+  # print(head(trait1_AF_control))
+  # print(trait1_N_case)
+  # first calculate the DefControl and DefCase - these are all 1 if there's no sample overlap
+  # for now we will assume no sample overlap
+  # TODO: implement sample overlap correction
+  N_caseInCase <- matrix(data = c(trait1_N_case + trait2_N_case, 0, 0, trait1_N_case + trait2_N_case), nrow = 2)
+  N_controlInControl <- matrix(data = c(trait1_N_control + trait2_N_control, 0, 0, 
+                                        trait1_N_control + trait2_N_control), nrow = 2)
+  N_caseInControl <- matrix(data = c(0, 0, 0, 0), nrow = 2)
+
+  # now we can calculate the default factor for trait 1 and 2 in cases and controls
+  DefCase <- c((N_caseInCase[1,1]/(N_caseInCase[1,1] + N_caseInCase[1,2])),
+               (N_caseInCase[2,2]/(N_caseInCase[2,2] + N_caseInCase[2,1])))
+  DefControl <- c((N_controlInControl[1,1]/(N_controlInControl[1,1] + N_controlInControl[1,2])),
+                  (N_controlInControl[2,2]/(N_controlInControl[2,2] + N_controlInControl[2,1])))
+   
+  # now we calculate the OR, SE, and p for cases and controls separately
+  # controls are used for analysis of stratification 
+  # overall final CC-GWAS result OR is exp(log(OR_case) - log(OR_control))
+  OR_stat_control <- calc_ORStat(trait1_AF_control, trait1_N_control, trait2_AF_control, trait2_N_control, DefControl)
+  OR_stat_case <- calc_ORStat(trait1_AF_case, trait1_N_case, trait2_AF_case, trait2_N_case, DefCase)
+  
+  OR <- exp(log(OR_stat_case$OR)-log(OR_stat_control$OR))
+  SE <- OR_stat_case$SE
+  p <- calc_waldP(log(OR), SE)
+  
+  return(data.frame(OR = OR, SE = SE, p = p,
+                    OR_control = OR_stat_control$OR,
+                    SE_control = OR_stat_control$SE))
+}
+
+
 #' @title CC_GWAS
 #' @description
 #' This is a function to run a case-case GWAS using the framework introduced in the ReACt package. The method will first filter out any SNPs with NA in the case or control AF. It will then remove any SNPs that are not present in both datasets. Finally, it will remove duplicate SNPs, by defualt keeping the first record. Then the CC-GWAS will be run. 
