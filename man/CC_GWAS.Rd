@@ -4,7 +4,7 @@
 \alias{CC_GWAS}
 \title{CC_GWAS}
 \usage{
-CC_GWAS <- function(trait1_AF_case, trait2_AF_case, trait1_N_case, trait2_N_case, trait1_AF_control, trait2_AF_control, trait1_N_control, trait2_N_control)
+CC_GWAS <- function(trait1_data, trait2_data, trait1_N_case, trait1_N_control, trait2_N_case, trait2_N_control)
 }
 \arguments{
 \item{trait1_data}{a dataframe of the data for trait 1 containing: chromosome, position, AF in cases, AF in controls, rsID}
