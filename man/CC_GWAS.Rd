@@ -9,7 +9,7 @@ CC_GWAS <- function(trait1_AF_case, trait2_AF_case, trait1_N_case, trait2_N_case
 \arguments{
 \item{trait1_data}{a dataframe of the data for trait 1 containing: chromosome, position, AF in cases, AF in controls, rsID}
 
-\item{trait2_data}a dataframe of the data for trait 2 containing: chromosome, position, AF in cases, AF in controls, rsID}
+\item{trait2_data}{a dataframe of the data for trait 2 containing: chromosome, position, AF in cases, AF in controls, rsID}
 
 \item{trait1_N_case}{an integer of the number of Case individuals for trait 1}
 
