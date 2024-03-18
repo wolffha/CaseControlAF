@@ -201,7 +201,7 @@ CC_GWAS <- function(trait1_data, trait2_data,
                          trait1_N_control = trait1_N_control,
                          trait2_N_control = trait2_N_control)
   
-  toreturn <- combined %>% select(chr.trait1, pos.trait1, RSID.trait1, A1.trait1, A2.trait1,
+  toreturn <- combined %>% select(chr.trait1, pos.trait1, RSID.trait1, A1, A2,
                                   AF_case.trait1, AF_case.trait2, AF_control.trait1,
                                   AF_control.trait2)
   colnames(toreturn)[1:5] <- c("chr", "pos", "RSID", "A1", "A2")
